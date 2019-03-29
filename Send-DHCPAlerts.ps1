@@ -1,4 +1,4 @@
-﻿<#
+<#
     .SYNOPSIS 
       Sends alerts based on certain DHCP events or configurations
     .Example
@@ -20,6 +20,7 @@ TD {border-width: 1px; padding: 3px; border-style: solid; border-color: black;}
 "@
   $datetime= Get-Date #| Out-String
   $LeaseInfo = Get-DhcpServerv4Lease -scopeID $scope -ComputerName $DhcpServer | select -Property ClientID, Hostname, AddressState | where {$_.AddressState -eq "Active"}
+  $LeaseInfo.ClientID = $LeaseInfo.ClientID -replace '-',''
   $Body = $LeaseInfo | ConvertTo-Html -Head $Header
   IF (!$LogFilePath) {$LogFilePath = (Get-Item -Path ".\").FullName}
       IF ($LeaseInfo) 
